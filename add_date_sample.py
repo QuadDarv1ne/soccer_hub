@@ -1,11 +1,11 @@
 import json
 import asyncio
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy import Boolean, Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Boolean, Column, Integer, String, DateTime, ForeignKey, select, text
 from sqlalchemy.orm import sessionmaker, relationship
 from datetime import datetime
 from app.db.models import Team, Player, Match, Goal, Base
-from app.core.config import DATABASE_URL
+from app.core.config import DATABASE_URL  # Предполагается, что DATABASE_URL загружается из .env файла
 import logging
 import aiohttp
 from bs4 import BeautifulSoup
@@ -55,12 +55,22 @@ async def parse_player_photo(player_name, http_session):
 
 # Функции для добавления записей
 async def add_team(session, name, city, founded, stadium, http_session):
+    existing_team = await session.execute(select(Team).where(Team.name == name))
+    if existing_team.scalars().first():
+        logger.warning(f"Team {name} already exists")
+        return
+
     url_photo = await parse_team_photo(name, http_session)
     team = Team(name=name, city=city, founded=founded, stadium=stadium, url_photo=url_photo)
     session.add(team)
     logger.info(f"Added team: {team.name}")
 
 async def add_player(session, name, position, team_id, goals, is_starter, http_session):
+    existing_player = await session.execute(select(Player).where(Player.name == name, Player.team_id == team_id))
+    if existing_player.scalars().first():
+        logger.warning(f"Player {name} already exists in team ID {team_id}")
+        return
+
     url_photo = await parse_player_photo(name, http_session)
     player = Player(name=name, position=position, team_id=team_id, goals=goals, url_photo=url_photo, is_starter=is_starter)
     session.add(player)
@@ -85,7 +95,7 @@ async def add_goal(session, match_id, player_id, minute):
 # Функция для сохранения данных в файлы JSON
 async def save_to_json(session):
     # Сохранение данных команд
-    result = await session.execute("SELECT * FROM teams")
+    result = await session.execute(text("SELECT * FROM teams"))
     teams = result.scalars().all()
     teams_data = [{
         "id": team.id,
@@ -102,7 +112,7 @@ async def save_to_json(session):
     logger.info("Teams data saved to teams.json")
     
     # Сохранение данных игроков
-    result = await session.execute("SELECT * FROM players")
+    result = await session.execute(text("SELECT * FROM players"))
     players = result.scalars().all()
     players_data = [{
         "id": player.id,
@@ -119,7 +129,7 @@ async def save_to_json(session):
     logger.info("Players data saved to players.json")
     
     # Сохранение данных матчей
-    result = await session.execute("SELECT * FROM matches")
+    result = await session.execute(text("SELECT * FROM matches"))
     matches = result.scalars().all()
     matches_data = [{
         "id": match.id,
@@ -135,7 +145,7 @@ async def save_to_json(session):
     logger.info("Matches data saved to matches.json")
     
     # Сохранение данных голов
-    result = await session.execute("SELECT * FROM goals")
+    result = await session.execute(text("SELECT * FROM goals"))
     goals = result.scalars().all()
     goals_data = [{
         "id": goal.id,
