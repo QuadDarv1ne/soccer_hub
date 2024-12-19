@@ -34,10 +34,10 @@ app.add_middleware(
 )
 
 # Подключение маршрутов
-# app.include_router(teams_router, prefix="/teams", tags=["Команды"])
-# app.include_router(matches_router, prefix="/matches", tags=["Матчи"])
-# app.include_router(analytics_router, prefix="/analytics", tags=["Аналитика"])
-# app.include_router(players_router, prefix="/players", tags=["Игроки"])
+app.include_router(teams_router, prefix="/teams", tags=["Команды"])
+app.include_router(matches_router, prefix="/matches", tags=["Матчи"])
+app.include_router(analytics_router, prefix="/analytics", tags=["Аналитика"])
+app.include_router(players_router, prefix="/players", tags=["Игроки"])
 
 # Обработка ошибки валидации
 @app.exception_handler(RequestValidationError)

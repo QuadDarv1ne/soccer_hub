@@ -4,11 +4,12 @@
 
 {% block content %}
 <div class="container my-4">
+    <a href="/" class="btn btn-light mb-3"><i class="fas fa-arrow-left"></i> На главную</a> <!-- Кнопка для возврата на главную страницу -->
     <h2 class="text-center mb-4">Список матчей</h2>
 
     <section>
         {% if matches %}
-            <table class="table table-hover table-striped">
+            <table class="table table-hover table-striped table-responsive">
                 <thead class="table-dark">
                     <tr>
                         <th>ID</th>
@@ -23,12 +24,20 @@
                         <tr>
                             <td>{{ match.id }}</td>
                             <td>
-                                <img src="{{ match.home_team.url_photo or 'https://www.example.com/default-team-logo.png' }}" alt="{{ match.home_team.name }} Logo" class="team-logo me-2">
+                                {% if match.home_team.url_photo %}
+                                    <img src="{{ match.home_team.url_photo }}" alt="{{ match.home_team.name }} Logo" class="team-logo me-2">
+                                {% else %}
+                                    <i class="fas fa-home team-icon me-2"></i>
+                                {% endif %}
                                 <span class="badge bg-primary me-2">🏠</span> 
                                 {{ match.home_team.name }}
                             </td>
                             <td>
-                                <img src="{{ match.away_team.url_photo or 'https://www.example.com/default-team-logo.png' }}" alt="{{ match.away_team.name }} Logo" class="team-logo me-2">
+                                {% if match.away_team.url_photo %}
+                                    <img src="{{ match.away_team.url_photo }}" alt="{{ match.away_team.name }} Logo" class="team-logo me-2">
+                                {% else %}
+                                    <i class="fas fa-plane team-icon me-2"></i>
+                                {% endif %}
                                 <span class="badge bg-secondary me-2">🌍</span>
                                 {{ match.away_team.name }}
                             </td>
@@ -58,4 +67,14 @@
         border-radius: 50%;
         object-fit: cover;
     }
+    .team-icon {
+        font-size: 30px;
+        color: #6c757d; /* Цвет иконок */
+    }
+    .table-responsive {
+        overflow-x: auto;
+    }
 </style>
+
+<!-- Подключение Font Awesome для иконок -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">

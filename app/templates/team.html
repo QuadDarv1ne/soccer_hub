@@ -9,11 +9,13 @@
             <h2 class="card-title text-primary">{{ team.name }}</h2>
             {% if team.url_photo %}
                 <img src="{{ team.url_photo }}" alt="{{ team.name }} Logo" class="img-fluid my-3 team-logo">
+            {% else %}
+                <i class="fas fa-shield-alt team-icon my-3"></i>
             {% endif %}
             <p class="card-text">
-                <strong>Город:</strong> {{ team.city }}<br>
-                <strong>Год основания:</strong> {{ team.founded }}<br>
-                <strong>Стадион:</strong> {{ team.stadium }}
+                <strong><i class="fas fa-city"></i> Город:</strong> {{ team.city }}<br>
+                <strong><i class="fas fa-calendar-alt"></i> Год основания:</strong> {{ team.founded }}<br>
+                <strong><i class="fas fa-stadium"></i> Стадион:</strong> {{ team.stadium }}
             </p>
         </div>
     </div>
@@ -27,6 +29,8 @@
                         <div class="d-flex align-items-center">
                             {% if player.url_photo %}
                                 <img src="{{ player.url_photo }}" alt="{{ player.name }} Photo" class="img-fluid player-photo me-3">
+                            {% else %}
+                                <i class="fas fa-user player-icon me-3"></i>
                             {% endif %}
                             <span>{{ player.name }}</span>
                         </div>
@@ -40,3 +44,29 @@
     </div>
 </div>
 {% endblock %}
+
+<style>
+    .team-logo {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    .team-icon {
+        font-size: 150px;
+        color: #6c757d; /* Цвет иконок */
+    }
+    .player-photo {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    .player-icon {
+        font-size: 50px;
+        color: #6c757d; /* Цвет иконок */
+    }
+</style>
+
+<!-- Подключение Font Awesome для иконок -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">

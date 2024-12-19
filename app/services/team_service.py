@@ -3,13 +3,11 @@ from app.db import models, schemas
 
 # Получение команды по ID
 def get_team_by_id(db: Session, team_id: int):
-    team = db.query(models.Team).filter(models.Team.id == team_id).first()
-    return team
+    return db.query(models.Team).filter(models.Team.id == team_id).first()
 
 # Получение всех команд
 def get_all_teams(db: Session):
-    teams = db.query(models.Team).all()
-    return teams
+    return db.query(models.Team).all()
 
 # Создание новой команды
 def create_team(db: Session, team: schemas.TeamCreate):

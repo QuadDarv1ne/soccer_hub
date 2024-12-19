@@ -4,30 +4,39 @@
 
 {% block content %}
 <div class="container my-4">
+    <a href="/" class="btn btn-light mb-3"><i class="fas fa-arrow-left"></i> На главную</a> <!-- Кнопка для возврата на главную страницу -->
     <h2 class="text-center mb-4">Аналитика команд</h2>
 
     <!-- Раздел Топ команд -->
     <section class="mb-5">
         <h3 class="text-primary">🏆 Топ команд</h3>
         {% if top_teams %}
-            <table class="table table-hover table-striped mt-3">
-                <thead class="table-dark">
-                    <tr>
-                        <th>ID</th>
-                        <th>Название команды</th>
-                        <th>Очки</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for team in top_teams %}
+            <div class="table-responsive mt-3">
+                <table class="table table-hover table-striped">
+                    <thead class="table-dark">
                         <tr>
-                            <td>{{ team.id }}</td>
-                            <td>{{ team.name }}</td>
-                            <td><span class="badge bg-success">{{ team.points }}</span></td>
+                            <th>ID</th>
+                            <th>Название команды</th>
+                            <th>Город</th>
+                            <th>Стадион</th>
+                            <th>Очки</th>
+                            <th>Игроки</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {% for team in top_teams %}
+                            <tr>
+                                <td>{{ team.id }}</td>
+                                <td>{{ team.name }}</td>
+                                <td>{{ team.city }}</td>
+                                <td>{{ team.stadium }}</td>
+                                <td><span class="badge bg-success">{{ team.points }}</span></td>
+                                <td>{{ team.players|length }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         {% else %}
             <p class="text-muted">Нет доступных данных для отображения.</p>
         {% endif %}
@@ -37,50 +46,107 @@
     <section class="mb-5">
         <h3 class="text-success">⚽ Лидеры по забитым голам</h3>
         {% if top_scorers %}
-            <table class="table table-hover table-striped mt-3">
-                <thead class="table-dark">
-                    <tr>
-                        <th>ID Игрока</th>
-                        <th>Имя Игрока</th>
-                        <th>Голы</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for player in top_scorers %}
+            <div class="table-responsive mt-3">
+                <table class="table table-hover table-striped">
+                    <thead class="table-dark">
                         <tr>
-                            <td>{{ player.id }}</td>
-                            <td>{{ player.name }}</td>
-                            <td><span class="badge bg-warning text-dark">{{ player.goals }}</span></td>
+                            <th>ID Игрока</th>
+                            <th>Имя Игрока</th>
+                            <th>Команда</th>
+                            <th>Позиция</th>
+                            <th>Голы</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {% for player in top_scorers %}
+                            <tr>
+                                <td>{{ player.id }}</td>
+                                <td>{{ player.name }}</td>
+                                <td>{{ player.team.name }}</td>
+                                <td>{{ player.position }}</td>
+                                <td><span class="badge bg-warning text-dark">{{ player.goals }}</span></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         {% else %}
             <p class="text-muted">Нет доступных данных для отображения.</p>
         {% endif %}
     </section>
 
     <!-- Раздел Статистика матчей -->
-    <section>
+    <section class="mb-5">
         <h3 class="text-info">📊 Статистика матчей</h3>
         {% if match_stats %}
-            <ul class="list-group mt-3">
-                <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div class="list-group mt-3">
+                <div class="list-group-item d-flex justify-content-between align-items-center">
                     Общий счёт забитых голов:
                     <span class="badge bg-primary rounded-pill">{{ match_stats.total_goals }}</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
+                </div>
+                <div class="list-group-item d-flex justify-content-between align-items-center">
                     Общее количество матчей:
                     <span class="badge bg-secondary rounded-pill">{{ match_stats.total_matches }}</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
+                </div>
+                <div class="list-group-item d-flex justify-content-between align-items-center">
                     Среднее количество голов за матч:
                     <span class="badge bg-info rounded-pill">{{ match_stats.avg_goals_per_match }}</span>
-                </li>
-            </ul>
+                </div>
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    Средний возраст игроков:
+                    <span class="badge bg-light rounded-pill">{{ match_stats.avg_player_age }}</span>
+                </div>
+            </div>
+        {% else %}
+            <p class="text-muted">Нет доступных данных для отображения.</p>
+        {% endif %}
+    </section>
+
+    <!-- Раздел Информация о каждом игроке -->
+    <section>
+        <h3 class="text-warning">📋 Подробная информация о игроках</h3>
+        {% if all_players %}
+            <div class="table-responsive mt-3">
+                <table class="table table-hover table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Имя</th>
+                            <th>Команда</th>
+                            <th>Позиция</th>
+                            <th>Голы</th>
+                            <th>Основной игрок</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for player in all_players %}
+                            <tr>
+                                <td>{{ player.id }}</td>
+                                <td>{{ player.name }}</td>
+                                <td>{{ player.team.name }}</td>
+                                <td>{{ player.position }}</td>
+                                <td>{{ player.goals }}</td>
+                                <td>{{ "Да" if player.is_starter else "Нет" }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         {% else %}
             <p class="text-muted">Нет доступных данных для отображения.</p>
         {% endif %}
     </section>
 </div>
 {% endblock %}
+
+<style>
+    .badge {
+        font-size: 1rem; /* Увеличиваем размер шрифта бейджа */
+    }
+    .table-responsive {
+        max-width: 100%;
+    }
+</style>
+
+<!-- Подключение Font Awesome для иконок -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">

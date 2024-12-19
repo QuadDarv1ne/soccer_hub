@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container my-4">
-    <a href="/" class="btn btn-light mb-3">На главную</a> <!-- Кнопка для возврата на главную страницу -->
+    <a href="/" class="btn btn-light mb-3"><i class="fas fa-arrow-left"></i> На главную</a> <!-- Кнопка для возврата на главную страницу -->
     <h2 class="text-center mb-4">Список игроков</h2>
 
     <div class="row">
@@ -12,7 +12,13 @@
             {% for player in players %}
                 <div class="col-md-4 mb-4">
                     <div class="card card-custom">
-                        <img src="{{ player.url_photo or 'https://www.example.com/default-player-photo.jpg' }}" class="card-img-top" alt="{{ player.name }}">
+                        {% if player.url_photo %}
+                            <img src="{{ player.url_photo }}" class="card-img-top" alt="{{ player.name }}">
+                        {% else %}
+                            <div class="card-img-top d-flex align-items-center justify-content-center player-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        {% endif %}
                         <div class="card-body">
                             <h5 class="card-title card-title-custom">{{ player.name }}</h5>
                             <p class="card-text">
@@ -82,4 +88,14 @@
         object-fit: cover; /* Обеспечиваем, чтобы изображение занимало всю область карточки */
         height: 200px; /* Устанавливаем фиксированную высоту для изображений */
     }
+
+    .player-icon {
+        height: 200px; /* Фиксированная высота для иконки */
+        background-color: #f8f9fa; /* Фон для иконки */
+        font-size: 100px; /* Размер иконки */
+        color: #6c757d; /* Цвет иконки */
+    }
 </style>
+
+<!-- Подключение Font Awesome для иконок -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">

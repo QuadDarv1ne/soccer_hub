@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Определяем базу данных и создаем движок
-DATABASE_URL = "sqlite:///./instance/soccer_hub.db"  # Путь к вашей базе данных
+DATABASE_URL="sqlite+aiosqlite:///./instance/soccer_hub.db"  # Путь к вашей базе данных
 
 def create_db():
     """Создает директорию базы данных и инициализирует базу данных."""
