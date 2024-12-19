@@ -5,8 +5,11 @@
 {% block content %}
 <div class="container my-4">
     <div class="card shadow-lg">
-        <div class="card-body">
+        <div class="card-body text-center">
             <h2 class="card-title text-primary">{{ team.name }}</h2>
+            {% if team.url_photo %}
+                <img src="{{ team.url_photo }}" alt="{{ team.name }} Logo" class="img-fluid my-3 team-logo">
+            {% endif %}
             <p class="card-text">
                 <strong>Город:</strong> {{ team.city }}<br>
                 <strong>Год основания:</strong> {{ team.founded }}<br>
@@ -21,7 +24,12 @@
             <ul class="list-group">
                 {% for player in team.players %}
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>{{ player.name }}</span>
+                        <div class="d-flex align-items-center">
+                            {% if player.url_photo %}
+                                <img src="{{ player.url_photo }}" alt="{{ player.name }} Photo" class="img-fluid player-photo me-3">
+                            {% endif %}
+                            <span>{{ player.name }}</span>
+                        </div>
                         <span class="badge bg-info">{{ player.position }}</span>
                     </li>
                 {% endfor %}

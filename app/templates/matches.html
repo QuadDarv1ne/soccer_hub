@@ -23,14 +23,16 @@
                         <tr>
                             <td>{{ match.id }}</td>
                             <td>
+                                <img src="{{ match.home_team.url_photo or 'https://www.example.com/default-team-logo.png' }}" alt="{{ match.home_team.name }} Logo" class="team-logo me-2">
                                 <span class="badge bg-primary me-2">🏠</span> 
                                 {{ match.home_team.name }}
                             </td>
                             <td>
+                                <img src="{{ match.away_team.url_photo or 'https://www.example.com/default-team-logo.png' }}" alt="{{ match.away_team.name }} Logo" class="team-logo me-2">
                                 <span class="badge bg-secondary me-2">🌍</span>
                                 {{ match.away_team.name }}
                             </td>
-                            <td>{{ match.date.strftime('%d %b %Y, %H:%M') }}</td> <!-- Изменено здесь -->
+                            <td>{{ match.date.strftime('%d %b %Y, %H:%M') }}</td>
                             <td>
                                 {% if match.home_score is not none and match.away_score is not none %}
                                     <span class="badge bg-success">{{ match.home_score }} - {{ match.away_score }}</span>
@@ -48,3 +50,12 @@
     </section>
 </div>
 {% endblock %}
+
+<style>
+    .team-logo {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+</style>

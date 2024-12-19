@@ -3,4 +3,9 @@ uvicorn
 SQLAlchemy
 pydantic
 alembic
-dotenv
+requests
+beautifulsoup4
+python-dotenv
+sqlalchemy[asyncio]
+asyncpg
+aiosqlite
